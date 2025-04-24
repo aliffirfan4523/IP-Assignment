@@ -1,0 +1,118 @@
+/* styles.css */
+
+body {
+  font-family: sans-serif;
+  margin: 10px;
+  background-color: #1e201e;
+  color: #ecdfcc;
+}
+
+div {
+  padding: 20px;
+  border-radius: 8px;
+
+  color: #ecdfcc;
+  background-color: #697565;
+  box-shadow: 0 2px 4px #3c3d37;
+  width: 1200px; /* Adjust width as needed */
+  margin: 20px auto; /* Center the div horizontally */
+}
+
+.main-div {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.div-confirmation{
+  align-items: center;
+}
+form p {
+  margin-bottom: 10px;
+}
+
+form p:first-child {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+form p:nth-child(2) {
+  font-size: 1.1em;
+  color: #ecdfcc;
+  margin-bottom: 15px;
+}
+
+label {
+  margin-left: 5px;
+}
+
+input[type="number"],
+input[type="date"],
+input[type="text"] {
+  padding: 8px;
+  border: 1px solid #ecdfcc;
+  background-color: #ecdfcc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+  width: calc(60% - 60px); /* Adjust width based on label width */
+  margin-left: 10px;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.warning {
+  color: #e29b3e;
+  font-size: 0.8em;
+  margin-left: 5px;
+  display: none; /* Initially hide the warning */
+}
+
+input:invalid + .warning {
+  display: inline; /* Show the warning when the input is invalid */
+}
+
+input:valid + .warning {
+  display: none; /* Optionally hide the warning when the input becomes valid */
+}
+
+table {
+  border-collapse: collapse;
+  border: 1px solid #ecdfcc;
+}
+
+table td {
+  border: 1px solid #ecdfcc;
+  padding: 10px;
+}
+
+button{
+  border: 2px solid #1e201e;
+  background-color: #ecdfcc;
+  color: #1e201e;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+/* You can add more specific styles for header and footer if needed,
+   assuming they have specific classes or IDs in your HTML files. */
+/*
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+*/
