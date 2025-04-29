@@ -13,7 +13,7 @@ div {
 
   color: #ecdfcc;
   background-color: #697565;
-  box-shadow: 0 2px 4px #3c3d37;
+  box-shadow: 0 3px 9px #3C3D37;
   width: 1200px; /* Adjust width as needed */
   margin: 20px auto; /* Center the div horizontally */
 }
@@ -21,11 +21,13 @@ div {
 .main-div {
   display: flex;
   gap: 20px;
+  background-color: #697565;
   align-items: flex-start;
 }
 
 .div-confirmation{
   align-items: center;
+  width: 700; /* Adjust width as needed */
 }
 form p {
   margin-bottom: 10px;
@@ -49,7 +51,8 @@ label {
 
 input[type="number"],
 input[type="date"],
-input[type="text"] {
+input[type="text"],
+select {
   padding: 8px;
   border: 1px solid #ecdfcc;
   background-color: #ecdfcc;

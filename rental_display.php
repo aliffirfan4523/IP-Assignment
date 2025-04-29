@@ -3,20 +3,16 @@ $page_title = 'Rental Details';
 include('./includes/function.php');
 include('./includes/header.html');
 
-
 $cityCalculation = [
     'total' => 0,
-    'weekdayFirst3HTotal' => 0,
-    'weekdayAfter3HTotal' => 0,
-    'weekendFirst3HTotal' => 0,
-    'weekendAfter3HTotal' => 0,
+    'first3HTotal' => 0,
+    'after3HTotal' => 0,
 ];
+
 $tandemCalculation = [
     'total' => 0,
-    'weekdayFirst3HTotal' => 0,
-    'weekdayAfter3HTotal' => 0,
-    'weekendFirst3HTotal' => 0,
-    'weekendAfter3HTotal' => 0,
+    'first3HTotal' => 0,
+    'after3HTotal' => 0,
 ];
 
 // Check if the form has been submitted from rental.php
@@ -28,14 +24,10 @@ if (isset($_POST['submit_rental'])) {
     $cityBike = isset($_POST['city']) ? $_POST['city'] : '';
     $tandemBike = isset($_POST['tandem']) ? $_POST['tandem'] : '';
     $rentalDate = isset($_POST['dateRental']) ? $_POST['dateRental'] : '';
-    $days = isset($_POST['days']) ? $_POST['days'] : '';
     $hours = isset($_POST['hours']) ? $_POST['hours'] : '';
 
-    $rentalDuration = ($days * 24) + $hours;
-    list($fullDays, $remainingHours) = getFullDaysAndRemainingHours($rentalDuration);
-    list($weekdayTotal, $weekendTotal) = $fullDays > 0
-        ? countWeekdaysAndWeekends($rentalDate, $fullDays)
-        : [0, 0];
+    $separatedDays = explode('|', $_POST['days']);
+    $isWeekday = isWeekday($rentalDate);
 
     //insert selected bike to array bikes for display
     $bikes = array();
@@ -44,16 +36,19 @@ if (isset($_POST['submit_rental'])) {
 
     //verify is 1 bike selected at least
     if (!$cityBike && !$tandemBike) {
-        echo '<h3 style="text-align: center">Please select at least 1 bike.&emsp; ';
-        echo '<button onclick="history.go(-1);">Back to main page</button></h3>';
-        exit();
+        displayMessage("Please select at least 1 bike.", "Back to main page");
     }
+
+    //verify is selected day is same as rental date
+    if (!isRentDateSameAsSelectedDay($separatedDays, $rentalDate)) {
+        displayMessage("The rental date is different from the selected rental day.", "Back to main page");
+    }
+
     //verify is rental duration is not empty
-    if ($rentalDuration <= 0) {
-        echo '<h3 style="text-align: center">Please enter at least 1 hour or 1 day.&emsp; ';
-        echo '<button onclick="history.go(-1);">Back to main page</button></h3>';
-        exit();
+    if ($hours <= 0) {
+        displayMessage("Please enter at least 1 hour or 1 day.", "Back to main page");
     }
+
     echo '<div class="div-confirmation">';
     echo '<h1 id="mainhead">Rental Confirmation</h1>' .
         '<p>Thank you for your rental request. Here are the details you provided:</p>' .
@@ -64,55 +59,31 @@ if (isset($_POST['submit_rental'])) {
     echo implode(', ', $bikes);
     echo '</li>' .
         '<li><strong>Rental Date:</strong> ' . htmlspecialchars($rentalDate) . '</li>' .
+        '<li><strong>Rental Day:</strong> ' . htmlspecialchars($separatedDays[1]) . '</li>' .
         '<li><strong>Rental Duration:</strong> ';
-    if (!empty($days) && $days > 0) {
-        echo htmlspecialchars($days) . ' day(s)';
-        if (!empty($hours) && $hours > 0) {
-            echo ' and ' . htmlspecialchars($hours) . ' hour(s)';
-        }
-    } elseif (!empty($hours) && $hours > 0) {
-        echo htmlspecialchars($hours) . ' hour(s)';
-    } else {
-        echo 'No duration specified.';
-    }
+    echo htmlspecialchars($hours) . ' hour(s)';
     echo '<li><strong>Rental Amount:</strong> ';
 
     echo '<table border="1">';
-    echo '<tr>
-        <th>Bicycle Type</th>
-        <th>Weekday Rental (RM)</th>
-        <th>Weekend Rental (RM)</th>
-        <th>Rental Duration</th>
-        <th>Total Amount (RM)</th>
-    </tr>';
+    echo '<tr> <th>Bicycle Type</th>';
+    if ($isWeekday) {
+        echo '<th>Weekday Rental (RM)</th>';
+    } else {
+        echo '<th>Weekend Rental (RM)</th>';
+    }
+    echo '<th>Rental Duration</th>
+        <th>Total Amount (RM)</th> </tr>';
 
     if ($cityBike) {
-        $cityCalculation = calculateRentalAmountByDay(
-            $weekdayTotal,
-            $weekendTotal,
-            $remainingHours,
-            $cityRates['weekday'],
-            $cityRates['weekend'],
-            $rentalDate,
-            $fullDays
-        );
-        displayRentalRow("City Bicycle", $rentalDuration, $cityCalculation);
+        $cityCalculation = calculateRental($hours, $cityRates['weekday'], $cityRates['weekend'], $isWeekday);
+        displayRentalRow("City Bicycle", $hours, $cityCalculation);
     }
 
     if ($tandemBike) {
-        $tandemCalculation = calculateRentalAmountByDay(
-            $weekdayTotal,
-            $weekendTotal,
-            $remainingHours,
-            $tandemRates['weekday'],
-            $tandemRates['weekend'],
-            $rentalDate,
-            $fullDays
-        );
-
-        displayRentalRow("Tandem Bicycle", $rentalDuration, $tandemCalculation);
+        $tandemCalculation = calculateRental($hours, $tandemRates['weekday'], $tandemRates['weekend'], $isWeekday);
+        displayRentalRow("Tandem Bicycle", $hours, $tandemCalculation);
     }
-    echo '<td colspan="4">Total Amount</td><td> RM ' . $cityCalculation['total'] + $tandemCalculation['total'] . '</td>';
+    echo '<td colspan="3">Total Amount</td><td> RM ' . $cityCalculation['total'] + $tandemCalculation['total'] . '</td>';
     echo '</table>';
     echo '</li>';
     echo '</li>';

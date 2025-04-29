@@ -47,12 +47,13 @@ include('./includes/function.php');
             <p>Please Enter Your Details</p>
             <p>
                 <label for="name">Name: </label>
-                <input type="text" name="name" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>" required>
+                <input type="text" name="name" value="<?php if (isset($_POST['name']))
+                    echo $_POST['name']; ?>" required>
                 <span class="warning">&#9888; Please fill this input</span>
             </p>
             <p><label for="mobileNumber">Mobile Number: </label>
-                <input type="text" name="mobile" min="10" max="12" 
-                value="<?php if (isset($_POST['mobile'])) echo $_POST['mobile']; ?>" required>
+                <input type="text" name="mobile" min="10" max="12" value="<?php if (isset($_POST['mobile']))
+                    echo $_POST['mobile']; ?>" required>
                 <span class="warning">&#9888; Please fill this input</span>
             </p>
             <p>
@@ -67,13 +68,36 @@ include('./includes/function.php');
             </p>
             <p>
                 <label for="days">Day:</label>
-                <input type="number" name="days" id="days" value="0" min="0">
-                <span class="warning">Please fill this input</span>
+                <select name="days">
+                    <option value="" <?php if (empty($_POST['dateRental']))
+                        echo 'selected disabled hidden'; ?>>Choose
+                        here</option>
+                    <?php
+                    $selectedDate = isset($_POST['dateRental']) ? $_POST['dateRental'] : date('Y-m-d'); // Use posted date or default to today
+                    $dayOfWeek = date('N', strtotime($selectedDate));
+                    $days = [
+                        1 => '1|Monday',
+                        2 => '2|Tuesday',
+                        3 => '3|Wednesday',
+                        4 => '4|Thursday',
+                        5 => '5|Friday',
+                        6 => '6|Saturday',
+                        7 => '7|Sunday',
+                    ];
+                    
+                    foreach ($days as $dayNum => $dayName) {
+                        $separatedDays = explode('|', $dayName);
+                        $selected = ($dayOfWeek == $separatedDays[0]) ? 'selected' : '';
+                        echo "<option value=\"$dayName\" $selected>{$separatedDays[1]}</option>";
+                    }
+                    ?>
+                </select>
             </p>
-            <p>
+            <br>
                 <label for="hours">Hours:</label>
-                <input type="number" name="hours" id="hours" value="1" min="0" max="24">
-                <span class="warning">Please fill this input</span>
+                <input type="number" name="hours" id="hours" value="3" min="3" max="24">
+
+                <span class="warning">Please select between 3 to 24 hours</span>
             </p>
             <p>
                 <button type="submit" name="submit_rental" value="Rent Now">Rent Now</button>
