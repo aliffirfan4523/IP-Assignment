@@ -46,7 +46,7 @@ if (isset($_POST['submit_rental'])) {
 
     //verify is rental duration is not empty
     if ($hours <= 0) {
-        displayMessage("Please enter at least 1 hour or 1 day.", "Back to main page");
+        displayMessage("Please enter at least 1 hour minimum.", "Back to main page");
     }
 
     echo '<div class="div-confirmation">';

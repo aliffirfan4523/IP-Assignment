@@ -58,10 +58,11 @@ function calculateRental($hours, $weekdayRate, $weekendRate, $isWeekday)
 }
 
 // Function to display  messages
-function displayMessage($message, $buttonText = "Back to main page") {
+function displayMessage($message, $buttonText = "Back to main page")
+{
     echo '</br></br></br></br></br></br></br></br></br>';
     echo '<div style="display: flex; justify-content: center; align-items: center; height: 100px; /* Adjust height as needed */">';
-    echo $message . "&emsp;";
+    echo '<h1>' . $message . "</h1>&emsp;";
     echo '<button onclick="history.go(-1);">' . $buttonText . '</button></h3>';
     exit();
 }

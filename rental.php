@@ -95,8 +95,7 @@ include('./includes/function.php');
             </p>
             <br>
                 <label for="hours">Hours:</label>
-                <input type="number" name="hours" id="hours" value="3" min="3" max="24">
-
+                <input type="number" name="hours" id="hours" value="3" max="24">
                 <span class="warning">Please select between 3 to 24 hours</span>
             </p>
             <p>
